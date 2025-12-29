@@ -14,8 +14,6 @@ export default defineConfig({
       title: 'NekoBot',
       description: 'AI驱动的机器人框架',
       themeConfig: {
-        // 启用主题切换
-        darkModeSwitch: true,
         nav: [
           { text: '快速开始', link: '/guide/getting-started' },
           { text: '关于', link: '/other/about' }
@@ -110,8 +108,6 @@ export default defineConfig({
       title: 'NekoBot',
       description: 'AI-powered bot framework',
       themeConfig: {
-        // 启用主题切换
-        darkModeSwitch: true,
         nav: [
           { text: 'Quick Start', link: '/en/guide/getting-started' },
           { text: 'About', link: '/en/other/about' }
@@ -203,9 +199,6 @@ export default defineConfig({
   },
 
   themeConfig: {
-    // 启用主题切换
-    darkModeSwitch: true,
-
     // 搜索配置
     search: {
       provider: 'local',
@@ -295,5 +288,16 @@ export default defineConfig({
     ['meta', { name: 'viewport', content: 'width=device-width, initial-scale=1.0' }],
     ['meta', { name: 'description', content: 'AI驱动的机器人框架' }],
     ['meta', { name: 'keywords', content: 'NekoBot, 机器人, AI, 插件, 框架' }]
-  ]
+  ],
+
+  vite: {
+    ssr: {
+      noExternal: [
+        '@nolebase/vitepress-plugin-enhanced-readabilities',
+        '@nolebase/vitepress-plugin-enhanced-readabilities/client',
+        'canvas-confetti',
+        'vue'
+      ]
+    }
+  }
 })

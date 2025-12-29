@@ -1,7 +1,7 @@
 # NekoBot 文档项目 Dockerfile
 
 # 使用官方 Node.js 镜像
-FROM node:18-alpine
+FROM node:20-alpine
 
 # 设置工作目录
 WORKDIR /app

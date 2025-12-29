@@ -9,8 +9,7 @@
     "preview": "vitepress preview docs",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs",
-    "typecheck": "node typecheck.cjs"
+    "docs:preview": "vitepress preview docs"
   },
   "keywords": [
     "nekobot",
@@ -21,18 +20,12 @@
   ],
   "author": "NekoBotDevs",
   "license": "MIT",
-  "packageManager": "pnpm@10.17.0",
-  "devDependencies": {
+  "dependencies": {
     "@nolebase/vitepress-plugin-enhanced-readabilities": "^2.18.2",
-    "@types/node": "^25.0.3",
-    "@types/vue": "^2.0.0",
-    "@vitejs/plugin-vue": "^6.0.3",
     "canvas-confetti": "^1.9.4",
-    "eslint": "^9.39.2",
-    "typescript": "^5.9.3",
-    "vite": "^7.3.0",
-    "vite-plugin-checker": "^0.12.0",
-    "vitepress": "^1.6.4",
-    "vue-tsc": "^3.2.1"
+    "vitepress": "^1.6.4"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
   }
 }
