@@ -1,352 +1,233 @@
+---
+layout: page
+title: QQ Platform Integration
+---
+
 # QQ Platform Integration
 
-NekoBot supports QQ platform integration through multiple methods, including aiocqhttp and QQ Official Bot API.
+NekoBot supports the QQ platform through the OneBot V11 protocol.
 
-## Integration Methods
+## OneBot V11 Protocol
 
-### 1. aiocqhttp (Recommended)
+OneBot V11 is the successor to CQHTTP, a universal robot message interface standard.
 
-aiocqhttp is a QQ bot framework compatible with nonebot2 protocol, supporting multiple QQ clients.
+## Quick Start
 
-#### Features
+### 1. Install NapCatQQ
 
-- Compatible with nonebot2 protocol
-- Supports multiple QQ clients
-- Rich features, active community
-- Well-documented
+NapCatQQ is a OneBot V11 implementation based on NTQQ.
 
-#### Installation and Configuration
+#### Windows
 
-1. **Install Dependencies**
+1. Download [NapCatQQ](https://github.com/NapNeko/NapCatQQ/releases)
+2. Extract and run
+3. Follow the prompts to configure
+
+#### Linux
 
 ```bash
-pip install aiocqhttp
+git clone https://github.com/NapNeko/NapCatQQ.git
+cd NapCatQQ
+docker run -d --name napcat -p 6299:6299 ghcr.io/mlikiowa/napcat-docker:latest
 ```
 
-2. **Configure Integration**
+### 2. Configure NekoBot
 
-Configure in `config/platforms.yaml`:
+Edit `data/platforms_sources.json`:
+
+```json
+{
+  "aiocqhttp": {
+    "type": "aiocqhttp",
+    "enable": true,
+    "id": "aiocqhttp",
+    "name": "NekoBot",
+    "ws_host": "0.0.0.0",
+    "ws_port": 6299,
+    "command_prefix": "/"
+  }
+}
+```
+
+### 3. Configure NapCatQQ
+
+Set up WebSocket service in NapCatQQ configuration file:
 
 ```yaml
-qq:
-  enabled: true
-  type: "aiocqhttp"
-  config:
-    app_id: "123456"                # QQ app ID
-    token: "your-token"             # Access token
-    secret: "your-secret"           # App secret
-    sandbox: false                  # Use sandbox environment
-    timeout: 30                     # Request timeout
-    retry_times: 3                  # Retry times
-    webhook_url: "http://localhost:8080/webhook/qq"  # Webhook URL
+onebot:
+  http:
+    enable: false
+  ws:
+    enable: true
+    host: 0.0.0.0
+    port: 6299
 ```
 
-3. **Start Service**
+### 4. Start Services
 
+1. Start NapCatQQ
+2. Start NekoBot:
 ```bash
 python main.py
 ```
 
-#### Permission Configuration
+## Event Types
 
-aiocqhttp requires the following permissions:
+NekoBot supports the following QQ events:
 
-- Basic permissions
-- Send message permissions
-- Receive message permissions
-- Group management permissions (optional)
+### Message Events
 
-### 2. QQ Official Bot API
+| Event Type | Description |
+|------------|-------------|
+| Group Message | Messages in groups |
+| Private Message | Private messages |
+| Group Notice Message | Group notice messages (e.g., join, leave) |
+| Channel Message | QQ channel messages |
 
-QQ Official Bot API is the official bot interface provided by Tencent.
+### Notification Events
 
-#### Features
+| Event Type | Description |
+|------------|-------------|
+| Group Member Increase | New member joins group |
+| Group Member Decrease | Member leaves group |
+| Group Mute | Group mute event |
+| Friend Add | Friend add event |
 
-- Official support, stable and reliable
-- Complete functionality
-- Requires enterprise certification
-- Has usage limitations
+## Sending Messages
 
-#### Configuration Steps
-
-1. **Apply for QQ Open Platform Account**
-
-Visit [QQ Open Platform](https://q.qq.com/qqbot/) to apply for a developer account.
-
-2. **Create Bot Application**
-
-- Login to QQ Open Platform
-- Create bot application
-- Get App ID and App Secret
-
-3. **Configure Bot**
-
-```yaml
-qq_official:
-  enabled: true
-  type: "websocket"
-  config:
-    app_id: "123456"
-    token: "your-token"
-    secret: "your-secret"
-    sandbox: false
-    websocket_url: "wss://api.qq.com/ws"
-```
-
-## Message Handling
-
-### Receive Messages
+### Send Group Message
 
 ```python
-@self.event("message")
-async def on_qq_message(message: Message):
-    """Handle QQ messages"""
-    if message.platform == "qq":
-        # Handle QQ messages
-        await message.reply("Received QQ message")
+await self.send_group_message(
+    group_id=123456,
+    user_id=789,
+    message="Hello!",
+    platform_id="aiocqhttp"
+)
 ```
 
-### Send Messages
+### Send Private Message
 
 ```python
-# Send text message
-await message.reply("Hello, QQ!")
-
-# Send image
-await message.send_image("path/to/image.jpg")
-
-# Send file
-await message.send_file("path/to/file.txt")
+await self.send_private_message(
+    user_id=789,
+    message="Hello!",
+    platform_id="aiocqhttp"
+)
 ```
+
+### Send Image
+
+```python
+import httpx
+
+async def send_image(self, group_id, user_id, image_url):
+    await self.send_group_message(
+        group_id=group_id,
+        user_id=user_id,
+        message=f"[CQ:image,file={image_url}]",
+        platform_id="aiocqhttp"
+    )
+```
+
+### Send Rich Message
+
+```python
+async def send_rich_message(self, group_id, user_id):
+    message = (
+        "Welcome to NekoBot!\n"
+        "[CQ:face,id=128]\n"
+        "Click for more: https://example.com"
+    )
+    await self.send_group_message(
+        group_id=group_id,
+        user_id=user_id,
+        message=message,
+        platform_id="aiocqhttp"
+    )
+```
+
+## CQ Code Format
+
+OneBot V11 uses CQ codes to represent special message elements:
+
+| CQ Code | Description | Example |
+|----------|-------------|---------|
+| `[CQ:image,file=xxx]` | Image | `[CQ:image,file=http://example.com/image.jpg]` |
+| `[CQ:record,file=xxx]` | Voice | `[CQ:record,file=http://example.com/audio.mp3]` |
+| `[CQ:at,id=xxx]` | Mention | `[CQ:at,id=123456]` |
+| `[CQ:face,id=xxx]` | Emoji | `[CQ:face,id=128]` |
+| `[CQ:share,url=xxx]` | Link share | `[CQ:share,url=https://example.com]` |
+| `[CQ:music,id=xxx]` | Music share | `[CQ:music,id=123456]` |
+
+## Advanced Features
 
 ### Group Management
 
 ```python
-# Get group info
-group_info = await self.get_group_info(group_id)
-
-# Get group members
-members = await self.get_group_members(group_id)
-
-# Kick group member
-await self.kick_group_member(group_id, user_id)
-```
-
-## Event Handling
-
-### Group Events
-
-```python
-@self.event("group_join")
-async def on_group_join(event: GroupJoinEvent):
-    """User joins group"""
-    await self.send_group_message(
-        event.group_id, 
-        f"Welcome {event.user_id} to the group!"
+async def kick_user(self, group_id, user_id, reject_add_request=False):
+    await self.platform_server.call_platform_api(
+        platform_id="aiocqhttp",
+        action="set_group_kick",
+        params={"group_id": group_id, "user_id": user_id, "reject_add_request": reject_add_request}
     )
 
-@self.event("group_leave")
-async def on_group_leave(event: GroupLeaveEvent):
-    """User leaves group"""
-    await self.send_group_message(
-        event.group_id, 
-        f"{event.user_id} left the group"
+async def mute_user(self, group_id, user_id, duration=60):
+    await self.platform_server.call_platform_api(
+        platform_id="aiocqhttp",
+        action="set_group_ban",
+        params={"group_id": group_id, "user_id": user_id, "duration": duration}
     )
 ```
 
-### Friend Events
+### Friend Operations
 
 ```python
-@self.event("friend_add")
-async def on_friend_add(event: FriendAddEvent):
-    """Add friend"""
-    await self.send_private_message(
-        event.user_id, 
-        "Hello! I'm NekoBot, nice to meet you!"
+async def add_friend(self, user_id, comment=""):
+    await self.platform_server.call_platform_api(
+        platform_id="aiocqhttp",
+        action="set_friend_add_request",
+        params={"flag": flag, "approve": True, "remark": comment}
     )
 ```
 
-## Permission Management
-
-### User Permissions
+### Get Group Member List
 
 ```python
-# Check user permissions
-if await self.check_permission(user_id, "admin"):
-    # Admin operations
-    pass
-
-# Set user permissions
-await self.set_user_permission(user_id, "admin")
-```
-
-### Group Permissions
-
-```python
-# Check group permissions
-if await self.check_group_permission(group_id, "manage"):
-    # Group management operations
-    pass
-```
-
-## Configuration Examples
-
-### Complete Configuration
-
-```yaml
-# config/platforms.yaml
-qq:
-  enabled: true
-  type: "aiocqhttp"
-  config:
-    app_id: "123456"
-    token: "your-token"
-    secret: "your-secret"
-    sandbox: false
-    timeout: 30
-    retry_times: 3
-    webhook_url: "http://localhost:8080/webhook/qq"
-    # Advanced configuration
-    heartbeat_interval: 30
-    reconnect_interval: 5
-    max_reconnect_times: 10
-    # Message filters
-    message_filters:
-      - "spam"
-      - "advertisement"
-    # Group management
-    group_management:
-      auto_approve: false
-      welcome_message: "Welcome to the group!"
-      leave_message: "Goodbye!"
-```
-
-### Environment Variable Configuration
-
-```bash
-# QQ configuration
-export QQ_APP_ID=123456
-export QQ_TOKEN=your-token
-export QQ_SECRET=your-secret
-export QQ_SANDBOX=false
+async def get_group_members(self, group_id):
+    result = await self.platform_server.call_platform_api(
+        platform_id="aiocqhttp",
+        action="get_group_member_list",
+        params={"group_id": group_id}
+    )
+    return result.get("data", [])
 ```
 
 ## Common Issues
 
-### 1. Connection Failed
+### Connection Failed
 
-**Issue**: Cannot connect to QQ server
+Check the following:
+1. NapCatQQ is running normally
+2. WebSocket port is correct
+3. Firewall allows connection
+4. NekoBot has permission to access NapCatQQ
 
-**Solutions**:
-- Check network connection
-- Verify App ID and Token
-- Check firewall settings
-- View error logs
+### Message Send Failed
 
-### 2. Message Send Failed
+1. Check if bot has permission to send messages in the group
+2. Confirm CQ code format is correct
+3. Check if message content contains prohibited content
 
-**Issue**: Cannot send messages
+### Group Permission Issues
 
-**Solutions**:
-- Check bot permissions
-- Verify group status
-- Check message content format
-- View API limitations
+Ensure the bot account has the following permissions:
+- Send message permission
+- @all members permission (if needed)
+- Admin permission (if management operations are required)
 
-### 3. Insufficient Permissions
+## Related Links
 
-**Issue**: Some operations are denied
-
-**Solutions**:
-- Apply for appropriate permissions
-- Check user permission settings
-- Verify group management permissions
-- Contact group owner for authorization
-
-### 4. Frequent Disconnections
-
-**Issue**: Bot frequently disconnects
-
-**Solutions**:
-- Check network stability
-- Adjust heartbeat interval
-- Increase reconnection attempts
-- Use stable server
-
-## Debugging Tips
-
-### Enable Debug Mode
-
-```yaml
-# config/config.yaml
-bot:
-  debug: true
-
-logging:
-  level: "DEBUG"
-  console:
-    enabled: true
-    colored: true
-```
-
-### View Logs
-
-```bash
-# View real-time logs
-tail -f logs/nekobot.log | grep qq
-
-# View error logs
-grep "ERROR" logs/nekobot.log | grep qq
-```
-
-### Test Connection
-
-```python
-# Test QQ connection
-async def test_qq_connection():
-    try:
-        result = await self.qq_client.get_login_info()
-        print(f"QQ connection successful: {result}")
-    except Exception as e:
-        print(f"QQ connection failed: {e}")
-```
-
-## Best Practices
-
-### 1. Message Handling
-
-- Use async processing
-- Add error handling
-- Limit message frequency
-- Filter spam messages
-
-### 2. Permission Management
-
-- Principle of least privilege
-- Regularly check permissions
-- Record permission changes
-- Revoke permissions promptly
-
-### 3. Performance Optimization
-
-- Use connection pooling
-- Cache frequently used data
-- Process tasks asynchronously
-- Monitor resource usage
-
-### 4. Security Considerations
-
-- Verify message sources
-- Filter sensitive content
-- Limit API calls
-- Regularly update keys
-
-## Related Resources
-
-- [aiocqhttp Documentation](https://aiocqhttp.nonebot.dev/)
-- [QQ Open Platform](https://q.qq.com/qqbot/)
-- [nonebot2 Documentation](https://v2.nonebot.dev/)
-- [QQ Bot Development Guide](https://bot.q.qq.com/wiki/)
-
-With the above configuration, you can successfully integrate with the QQ platform and let NekoBot serve you on QQ!
-
+- [OneBot V11 Specification](https://11.onebot.dev/)
+- [NapCatQQ GitHub](https://github.com/NapNeko/NapCatQQ)
+- [CQ Code List](https://docs.go-cqhttp.org/cqcode)

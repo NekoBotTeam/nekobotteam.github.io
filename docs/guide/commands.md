@@ -1,38 +1,33 @@
----
-layout: page
-title: Command System
----
+# 命令系统
 
-# Command System
+NekoBot 提供了灵活的命令系统，允许插件注册和管理命令。
 
-NekoBot provides a flexible command system that allows plugins to register and manage commands.
+## 命令概述
 
-## Command Overview
+命令是用户与机器人交互的主要方式。用户通过发送特定格式的消息来触发命令。
 
-Commands are the main way for users to interact with the bot. Users trigger commands by sending messages in a specific format.
+## 命令格式
 
-## Command Format
+默认命令格式：`<命令前缀><命令名> [参数1] [参数2] ...`
 
-Default command format: `<command_prefix><command_name> [arg1] [arg2] ...`
-
-Examples:
+示例：
 ```
 /hello
-/weather Beijing
-/help group-management
+/weather 北京
+/help 群组管理
 ```
 
-## Registering Commands
+## 注册命令
 
-### Basic Command Registration
+### 基础命令注册
 
-Use the `@register` decorator to register commands:
+使用 `@register` 装饰器注册命令：
 
 ```python
 from packages.backend.plugins.base import BasePlugin, register
 
 class MyPlugin(BasePlugin):
-    @register("hello", "Say hello")
+    @register("hello", "打招呼")
     async def hello_command(self, args, message):
         await self.send_group_message(
             message['group_id'],
@@ -41,31 +36,31 @@ class MyPlugin(BasePlugin):
         )
 ```
 
-### Commands with Aliases
+### 带别名的命令
 
 ```python
-@register("weather", "Check weather", aliases=["w", "weather"])
+@register("weather", "查询天气", aliases=["w", "天気"])
 async def weather_command(self, args, message):
-    location = args[0] if args else "Beijing"
+    location = args[0] if args else "北京"
     await self.send_group_message(
         message['group_id'],
         message['user_id'],
-        f"Checking weather for {location}..."
+        f"正在查询 {location} 的天气..."
     )
 ```
 
-## Command Arguments
+## 命令参数
 
-### Accessing Arguments
+### 访问参数
 
 ```python
-@register("greet", "Greet someone")
+@register("greet", "问候")
 async def greet_command(self, args, message):
     if not args:
         await self.send_group_message(
             message['group_id'],
             message['user_id'],
-            "Please specify who to greet, e.g., /greet Alice"
+            "请输入问候对象，例如：/greet Alice"
         )
         return
     
@@ -73,14 +68,14 @@ async def greet_command(self, args, message):
     await self.send_group_message(
         message['group_id'],
         message['user_id'],
-        f"Hello, {name}!"
+        f"你好, {name}!"
     )
 ```
 
-### Parsing Complex Arguments
+### 解析复杂参数
 
 ```python
-@register("add", "Add two numbers")
+@register("add", "相加")
 async def add_command(self, args, message):
     try:
         num1 = float(args[0])
@@ -95,34 +90,34 @@ async def add_command(self, args, message):
         await self.send_group_message(
             message['group_id'],
             message['user_id'],
-            "Invalid format, use: /add number1 number2"
+            "格式错误，请使用：/add 数字1 数字2"
         )
 ```
 
-## Message Object
+## 消息对象
 
-The `message` parameter received by command handler functions contains the following information:
+命令处理函数接收的 `message` 参数包含以下信息：
 
 ```python
 {
     "message_id": 12345,
     "group_id": 67890,
     "user_id": 54321,
-    "sender_name": "User Nickname",
-    "message_type": "group",  # group or private
+    "sender_name": "用户昵称",
+    "message_type": "group",  # group 或 private
     "message": "/hello",
     "platform_id": "aiocqhttp",
-    "raw_message": "...",  # Original message
+    "raw_message": "...",  # 原始消息
     "timestamp": 1234567890
 }
 ```
 
-## Subcommands
+## 子命令
 
-Implement subcommand system like Git:
+实现类似 Git 的子命令系统：
 
 ```python
-@register("user", "User management")
+@register("user", "用户管理")
 async def user_command(self, args, message):
     if not args:
         await self.show_user_help(message)
@@ -137,7 +132,7 @@ async def user_command(self, args, message):
         await self.send_group_message(
             message['group_id'],
             message['user_id'],
-            f"Unknown subcommand: {subcommand}"
+            f"未知的子命令: {subcommand}"
         )
 
 async def show_user_info(self, args, message):
@@ -145,35 +140,35 @@ async def show_user_info(self, args, message):
     await self.send_group_message(
         message['group_id'],
         message['user_id'],
-        f"User ID: {user_id}"
+        f"用户 ID: {user_id}"
     )
 
 async def list_users(self, message):
     await self.send_group_message(
         message['group_id'],
         message['user_id'],
-        "User list..."
+        "用户列表..."
     )
 ```
 
-## Command Conflict Handling
+## 命令冲突处理
 
-When multiple plugins register the same command, a conflict occurs. NekoBot provides conflict detection mechanism:
+当多个插件注册相同命令时，会发生冲突。NekoBot 提供冲突检测机制：
 
 ```python
-@register("hello", "Say hello")
+@register("hello", "打招呼")
 async def hello_command(self, args, message):
-    # Check for conflicts
+    # 检查是否有冲突
     conflicts = check_command_conflicts("hello")
     if conflicts:
         await self.send_group_message(
             message['group_id'],
             message['user_id'],
-            f"Command 'hello' has conflicts: {', '.join(conflicts)}"
+            f"命令 'hello' 存在冲突: {', '.join(conflicts)}"
         )
         return
     
-    # Process command normally
+    # 正常处理命令
     await self.send_group_message(
         message['group_id'],
         message['user_id'],
@@ -181,50 +176,50 @@ async def hello_command(self, args, message):
     )
 ```
 
-## Command Permissions
+## 命令权限
 
-### Implementing Permission Check
+### 实现权限检查
 
 ```python
 class MyPlugin(BasePlugin):
     def __init__(self):
         super().__init__()
-        self.admins = [123456789]  # Admin list
+        self.admins = [123456789]  # 管理员列表
     
     def is_admin(self, user_id):
         return user_id in self.admins
     
-    @register("admin", "Admin command")
+    @register("admin", "管理员命令")
     async def admin_command(self, args, message):
         if not self.is_admin(message['user_id']):
             await self.send_group_message(
                 message['group_id'],
                 message['user_id'],
-                "You don't have permission to execute this command"
+                "你没有权限执行此命令"
             )
             return
         
         await self.send_group_message(
             message['group_id'],
             message['user_id'],
-            "Admin command executed"
+            "管理员命令已执行"
         )
 ```
 
-## Command Help
+## 命令帮助
 
-### Auto-generating Help
+### 自动生成帮助
 
 ```python
 class MyPlugin(BasePlugin):
     def __init__(self):
         super().__init__()
         self.commands = {
-            "hello": {"description": "Say hello", "usage": "/hello"},
-            "weather": {"description": "Check weather", "usage": "/weather [city]"},
+            "hello": {"description": "打招呼", "usage": "/hello"},
+            "weather": {"description": "查询天气", "usage": "/weather [城市]"},
         }
     
-    @register("help", "Show help")
+    @register("help", "显示帮助")
     async def help_command(self, args, message):
         if args:
             command = args[0]
@@ -238,13 +233,13 @@ class MyPlugin(BasePlugin):
         await self.send_group_message(
             message['group_id'],
             message['user_id'],
-            f"Command: {command}\n"
-            f"Description: {cmd_info['description']}\n"
-            f"Usage: {cmd_info['usage']}"
+            f"命令: {command}\n"
+            f"描述: {cmd_info['description']}\n"
+            f"用法: {cmd_info['usage']}"
         )
     
     async def show_all_commands(self, message):
-        help_text = "Available commands:\n"
+        help_text = "可用命令:\n"
         for cmd, info in self.commands.items():
             help_text += f"/{cmd} - {info['description']}\n"
         await self.send_group_message(
@@ -254,17 +249,17 @@ class MyPlugin(BasePlugin):
         )
 ```
 
-## Command Best Practices
+## 命令最佳实践
 
-1. **Parameter Validation**: Always validate command parameters
-2. **Error Messages**: Provide clear error messages
-3. **Help Documentation**: Provide help documentation for each command
-4. **Permission Control**: Implement appropriate permission checks
-5. **Response Time**: Respond quickly, avoid long blocking
+1. **参数验证**: 始终验证命令参数
+2. **错误提示**: 提供清晰的错误提示信息
+3. **帮助文档**: 为每个命令提供帮助文档
+4. **权限控制**: 实现适当的权限检查
+5. **响应时间**: 快速响应，避免长时间阻塞
 
-## Command Management API
+## 命令管理 API
 
-### Check Command Conflicts
+### 检查命令冲突
 
 ```python
 from packages.backend.core.command_management import check_command_conflicts
@@ -272,7 +267,7 @@ from packages.backend.core.command_management import check_command_conflicts
 conflicts = check_command_conflicts("command_name")
 ```
 
-### Get All Commands
+### 获取所有命令
 
 ```python
 from packages.backend.core.command_management import get_all_commands
@@ -280,7 +275,7 @@ from packages.backend.core.command_management import get_all_commands
 commands = get_all_commands()
 ```
 
-### Get Plugin Commands
+### 获取插件命令
 
 ```python
 from packages.backend.core.command_management import get_plugin_commands

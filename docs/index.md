@@ -1,73 +1,39 @@
 ---
 layout: home
+title: 首页
 
 hero:
-  name: "NekoBot"
-  text: "AI驱动的机器人框架"
-  tagline: "支持多种LLM服务商，可扩展的插件系统，多平台对接"
+  name: NekoBot
+  text: 多平台智能聊天机器人框架
+  tagline: 一个功能强大、易于扩展的聊天机器人框架，支持多个聊天平台和 LLM 服务商
   image:
     src: /logo.svg
-    alt: NekoBot
+    alt: NekoBot Logo
   actions:
     - theme: brand
       text: 快速开始
-      link: /zh/guide/getting-started
+      link: /guide/getting-started
     - theme: alt
-      text: 查看GitHub
-      link: https://github.com/NekoBotDevs/NekoBot
+      text: GitHub
+      link: https://github.com/NekoBotTeam/NekoBot
 
 features:
-  - icon: 🧩
-    title: 插件系统
-    details: 支持本地和在线插件，热重载，依赖管理，让机器人功能无限扩展
-  - icon: 🤖
-    title: 多平台支持
-    details: 支持QQ、Discord、Telegram、微信、钉钉等主流聊天平台
-  - icon: 🧠
-    title: AI驱动
-    details: 集成多种LLM服务商，支持长上下文记忆、网络搜索、工具调用
-  - icon: ⚙️
-    title: 灵活配置
-    details: 可视化仪表盘，自定义提示词，权限管理，日志监控
-  - icon: 🔧
-    title: 开发者友好
-    details: 完整的API文档，CLI工具，Docker部署，代码格式化
-  - icon: 🛡️
-    title: 安全可靠
-    details: JWT认证，密码加密，CORS控制，版本管理
+  - title: 多平台支持
+    icon: ✨
+    details: 支持 QQ (OneBot V11)、Telegram、Discord 等主流聊天平台，轻松实现跨平台消息同步和管理。
+  - title: 多 LLM 集成
+    icon: 🤖
+    details: 集成 OpenAI、Google Gemini、智谱 AI 等主流 LLM 服务商，提供强大的对话能力。
+  - title: 插件系统
+    icon: 🧩
+    details: 完善的插件生态，支持热加载、热重载，快速扩展功能。
+  - title: Web 仪表盘
+    icon: 📊
+    details: 基于 React + Vite 的现代化管理界面，提供友好的可视化操作体验。
+  - title: 高性能架构
+    icon: ⚡
+    details: 基于 Quart (异步 Flask) 的异步架构，高性能处理消息和请求。
+  - title: 安全可靠
+    icon: 🔒
+    details: JWT 认证、bcrypt 密码加密，确保数据和账户安全。
 ---
-
-## 项目特色
-
-NekoBot 是一个现代化的AI机器人框架，专为开发者和用户设计，提供：
-
-- **强大的插件系统** - 支持本地和在线插件，热重载，依赖自动管理
-- **多平台对接** - 同时支持QQ、Discord、Telegram、微信等12+平台
-- **AI能力** - 集成OpenAI、Anthropic、Google等主流LLM服务商
-- **可视化界面** - 现代化的Web仪表盘，轻松管理配置和监控状态
-- **开发者工具** - 完整的CLI工具链，支持版本管理和密码重置
-
-## 快速开始
-
-```bash
-# 克隆项目
-git clone https://github.com/NekoBotDevs/NekoBot.git
-cd NekoBot
-
-# 安装依赖
-pip install -r requirements.txt
-
-# 启动服务
-python main.py
-```
-
-访问 `http://localhost:8080` 查看仪表盘，默认用户名和密码均为 `nekobot`。
-
-## 技术栈
-
-- **后端**: Python + Quart + SQLite
-- **前端**: Next.js + TypeScript
-- **AI**: OpenAI / Anthropic / Google Gemini 等
-- **部署**: Docker + Docker Compose
-- **文档**: VitePress + 国际化支持
-

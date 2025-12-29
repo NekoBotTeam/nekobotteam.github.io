@@ -1,9 +1,32 @@
 import DefaultTheme from 'vitepress/theme'
 import './custom.css'
+import Confetti from './components/Confetti.vue'
+import JumboBackground from './components/JumboBackground.vue'
+import { h } from 'vue'
+import {
+  NolebaseEnhancedReadabilitiesMenu,
+  NolebaseEnhancedReadabilitiesPlugin,
+  NolebaseEnhancedReadabilitiesScreenMenu,
+} from '@nolebase/vitepress-plugin-enhanced-readabilities/client'
+
+import '@nolebase/vitepress-plugin-enhanced-readabilities/client/style.css'
 
 export default {
   extends: DefaultTheme,
+  Layout: () => {
+    return h(DefaultTheme.Layout, null, {
+      'home-hero-before': () => h(JumboBackground),
+      'nav-bar-content-after': () => h(NolebaseEnhancedReadabilitiesMenu),
+      'nav-screen-content-after': () => h(NolebaseEnhancedReadabilitiesScreenMenu),
+    })
+  },
   enhanceApp({ app }) {
-    // 注册全局组件
+    app.component('Confetti', Confetti)
+    app.use(NolebaseEnhancedReadabilitiesPlugin, {
+      spotlight: {
+        disableHelp: true,
+        defaultToggle: true,
+      },
+    })
   }
 }

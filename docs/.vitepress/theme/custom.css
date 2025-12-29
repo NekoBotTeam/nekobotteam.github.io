@@ -1,25 +1,27 @@
 /* 自定义主题样式 */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@700&display=swap');
+
 :root {
-  --vp-c-brand-1: #39C5BB;
-  --vp-c-brand-2: #2BA8A0;
-  --vp-c-brand-3: #1D8B85;
-  --vp-c-brand-soft: rgba(57, 197, 187, 0.14);
+  --vp-c-brand-1: #4DD4C9;
+  --vp-c-brand-2: #39C5BB;
+  --vp-c-brand-3: #2BA8A0;
+  --vp-c-brand-soft: rgba(77, 212, 201, 0.14);
   
   /* 自定义颜色变量 */
-  --vp-c-brand: #39C5BB;
-  --vp-c-brand-light: #4DD4C9;
-  --vp-c-brand-lighter: #7DE0D7;
-  --vp-c-brand-lightest: #B3F0EB;
-  --vp-c-brand-dark: #2BA8A0;
-  --vp-c-brand-darker: #1D8B85;
-  --vp-c-brand-dimm: rgba(57, 197, 187, 0.08);
+  --vp-c-brand: #4DD4C9;
+  --vp-c-brand-light: #39C5BB;
+  --vp-c-brand-lighter: #2BA8A0;
+  --vp-c-brand-lightest: #1D8B85;
+  --vp-c-brand-dark: #39C5BB;
+  --vp-c-brand-darker: #2BA8A0;
+  --vp-c-brand-dimm: rgba(77, 212, 201, 0.08);
 }
 
 /* 深色模式 */
 .dark {
   --vp-c-brand-1: #4DD4C9;
-  --vp-c-brand-2: #7DE0D7;
-  --vp-c-brand-3: #B3F0EB;
+  --vp-c-brand-2: #39C5BB;
+  --vp-c-brand-3: #2BA8A0;
   --vp-c-brand-soft: rgba(77, 212, 201, 0.16);
 }
 
@@ -29,8 +31,12 @@
 }
 
 .VPNavBar .title {
-  color: var(--vp-c-brand-1);
-  font-weight: 600;
+  background: linear-gradient(120deg, var(--vp-c-brand-light) 30%, var(--vp-c-brand-1));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+  font-family: 'Outfit', sans-serif;
 }
 
 /* 侧边栏样式 */
@@ -51,13 +57,13 @@
 
 /* 按钮样式 */
 .VPButton.brand {
-  background-color: var(--vp-c-brand-1);
-  border-color: var(--vp-c-brand-1);
+  background-color: var(--vp-c-brand-light);
+  border-color: var(--vp-c-brand-light);
 }
 
 .VPButton.brand:hover {
-  background-color: var(--vp-c-brand-2);
-  border-color: var(--vp-c-brand-2);
+  background-color: var(--vp-c-brand-1);
+  border-color: var(--vp-c-brand-1);
 }
 
 /* 链接样式 */
@@ -95,6 +101,8 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
 }
 
 .VPHome .tagline {
@@ -204,5 +212,91 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--vp-c-brand-2);
+}
+
+/* 首页文字渐变效果 */
+.VPHomeHero .main .text,
+.VPHomeHero .main .name span {
+  --tw-gradient-from: #99d3fb;
+  --tw-gradient-via: #a1b8fc;
+  --tw-gradient-to: #ebc4fb;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-via), var(--tw-gradient-to);
+  background-image: linear-gradient(to right, var(--tw-gradient-stops));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+/* 透明效果 */
+:root {
+  /* 首页下滑后导航透明 */
+  .VPNavBar:not(.has-sidebar):not(.home.top) {
+    background-color: rgba(255, 255, 255, 0);
+    backdrop-filter: blur(10px);
+  }
+
+  /* 搜索框透明 */
+  .DocSearch-Button {
+    background-color: rgba(255, 255, 255, 0);
+    backdrop-filter: blur(10px);
+  }
+
+  /* Feature透明 */
+  .VPFeature {
+    border: none;
+    box-shadow: 0 10px 30px 0 rgb(0 0 0 / 15%);
+    background-color: transparent;
+  }
+
+  /* 文档页侧边栏顶部透明 */
+  .curtain {
+    background-color: rgba(255, 255, 255, 0);
+    backdrop-filter: blur(10px);
+  }
+
+  @media (min-width: 960px) {
+    /* 文档页导航中间透明 */
+    .VPNavBar:not(.home.top) .content-body {
+      background-color: rgba(255, 255, 255, 0);
+      backdrop-filter: blur(10px);
+    }
+  }
+
+  /* 移动端大纲栏透明 */
+  .VPLocalNav {
+    background-color: rgba(255, 255, 255, 0);
+    backdrop-filter: blur(10px);
+  }
+}
+
+/* 深色模式透明效果 */
+.dark {
+  .VPNavBar:not(.has-sidebar):not(.home.top) {
+    background-color: rgba(0, 0, 0, 0);
+    backdrop-filter: blur(10px);
+  }
+
+  .DocSearch-Button {
+    background-color: rgba(0, 0, 0, 0);
+    backdrop-filter: blur(10px);
+  }
+
+  .curtain {
+    background-color: rgba(0, 0, 0, 0);
+    backdrop-filter: blur(10px);
+  }
+
+  @media (min-width: 960px) {
+    .VPNavBar:not(.home.top) .content-body {
+      background-color: rgba(0, 0, 0, 0);
+      backdrop-filter: blur(10px);
+    }
+  }
+
+  .VPLocalNav {
+    background-color: rgba(0, 0, 0, 0);
+    backdrop-filter: blur(10px);
+  }
 }
 

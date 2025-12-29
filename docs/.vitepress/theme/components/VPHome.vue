@@ -2,6 +2,7 @@
   <div class="VPHome">
     <div class="container">
       <div class="hero">
+        <img v-if="hero.image" :src="hero.image.src" :alt="hero.image.alt" class="hero-image" />
         <h1 class="name">
           <span class="clip">{{ hero.name }}</span>
         </h1>
@@ -25,8 +26,9 @@
           :key="feature.title"
           class="feature"
         >
-          <div class="icon">
-            {{ feature.icon }}
+          <div v-if="feature.icon" class="icon">
+            <img v-if="typeof feature.icon === 'object'" :src="feature.icon.src" :alt="feature.title" />
+            <span v-else>{{ feature.icon }}</span>
           </div>
           <h3 class="title">{{ feature.title }}</h3>
           <p class="details">{{ feature.details }}</p>
@@ -65,11 +67,18 @@ const features = computed(() => frontmatter.value.features || [])
   margin-bottom: 4rem;
 }
 
+.hero-image {
+  width: 128px;
+  height: 128px;
+  margin-bottom: 2rem;
+}
+
 .name {
   font-size: 3.5rem;
   font-weight: 700;
+  font-family: 'Outfit', sans-serif;
   margin: 0 0 1rem 0;
-  background: linear-gradient(120deg, var(--vp-c-brand-1) 30%, var(--vp-c-brand-2));
+  background: linear-gradient(120deg, var(--vp-c-brand-light) 30%, var(--vp-c-brand-1));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -95,7 +104,7 @@ const features = computed(() => frontmatter.value.features || [])
   flex-wrap: wrap;
 }
 
-.action {
+.actions :deep(.action) {
   display: inline-block;
   padding: 0.75rem 1.5rem;
   border-radius: 6px;
@@ -104,25 +113,25 @@ const features = computed(() => frontmatter.value.features || [])
   transition: all 0.2s ease;
 }
 
-.action.brand {
-  background: var(--vp-c-brand-1);
+.actions :deep(.action.brand) {
+  background: var(--vp-c-brand-light);
   color: white;
+  border: none;
 }
 
-.action.brand:hover {
-  background: var(--vp-c-brand-2);
+.actions :deep(.action.brand:hover) {
+  background: var(--vp-c-brand-1);
   transform: translateY(-1px);
 }
 
-.action.alt {
+.actions :deep(.action.alt) {
   background: var(--vp-c-bg-soft);
   color: var(--vp-c-text-1);
   border: 1px solid var(--vp-c-divider);
 }
 
-.action.alt:hover {
-  border-color: var(--vp-c-brand-1);
-  color: var(--vp-c-brand-1);
+.actions :deep(.action.alt:hover) {
+  opacity: 0.8;
 }
 
 .features {
@@ -148,8 +157,19 @@ const features = computed(() => frontmatter.value.features || [])
 }
 
 .icon {
-  font-size: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-bottom: 1rem;
+}
+
+.icon img {
+  width: 48px;
+  height: 48px;
+}
+
+.icon span {
+  font-size: 3rem;
 }
 
 .title {

@@ -1,24 +1,19 @@
----
-layout: page
-title: Discord Platform Integration
----
+# Discord 平台对接
 
-# Discord Platform Integration
+NekoBot 支持 Discord 平台，通过 Discord Bot API 对接。
 
-NekoBot supports Discord platform through Discord Bot API.
+## Discord Bot 令牌
 
-## Discord Bot Token
+### 1. 创建 Discord 应用
 
-### 1. Create Discord Application
+1. 访问 [Discord 开发者门户](https://discord.com/developers/applications)
+2. 点击 "New Application" 创建新应用
+3. 进入 "Bot" 页面，点击 "Add Bot"
+4. 复制 Bot Token
 
-1. Visit [Discord Developer Portal](https://discord.com/developers/applications)
-2. Click "New Application" to create a new application
-3. Go to "Bot" page and click "Add Bot"
-4. Copy Bot Token
+### 2. 配置 NekoBot
 
-### 2. Configure NekoBot
-
-Edit `data/platforms_sources.json`:
+编辑 `data/platforms_sources.json`：
 
 ```json
 {
@@ -32,74 +27,74 @@ Edit `data/platforms_sources.json`:
 }
 ```
 
-### 3. Configure Bot Permissions
+### 3. 配置 Bot 权限
 
-Set up Bot permissions in Discord Developer Portal:
+在 Discord 开发者门户设置 Bot 权限：
 
-- `Send Messages` - Send messages
-- `Embed Links` - Embed links
-- `Attach Files` - Attach files
-- `Read Message History` - Read message history
-- `Add Reactions` - Add reactions
-- `Use Slash Commands` - Use slash commands
+- `Send Messages` - 发送消息
+- `Embed Links` - 嵌入链接
+- `Attach Files` - 附件文件
+- `Read Message History` - 读取消息历史
+- `Add Reactions` - 添加表情
+- `Use Slash Commands` - 使用斜杠命令
 
-### 4. Invite Bot
+### 4. 邀请 Bot
 
-Generate invite link:
+生成邀请链接：
 
 ```
 https://discord.com/api/oauth2/authorize?client_id=YOUR_CLIENT_ID&permissions=8&scope=bot
 ```
 
-Or use Discord Developer Portal's "OAuth2" page to generate invite link.
+或使用 Discord 开发者门户的 "OAuth2" 页面生成邀请链接。
 
-## Message Events
+## 消息事件
 
-### Supported Events
+### 支持的事件
 
-| Event Type | Description |
-|------------|-------------|
-| Message Create | New message |
-| Message Update | Message edited |
-| Message Delete | Message deleted |
-| Reaction Add | Reaction added |
-| Reaction Remove | Reaction removed |
-| Member Join | Member joins server |
-| Member Leave | Member leaves server |
+| 事件类型 | 说明 |
+|----------|------|
+| 消息创建 | 新消息 |
+| 消息编辑 | 消息编辑 |
+| 消息删除 | 消息删除 |
+| 反应添加 | 表情反应添加 |
+| 反应删除 | 表情反应删除 |
+| 成员加入 | 成员加入服务器 |
+| 成员离开 | 成员离开服务器 |
 
-## Message Format
+## 消息格式
 
-Discord messages use Markdown format:
+Discord 消息使用 Markdown 格式：
 
 ```python
-# Plain text
+# 普通文本
 message = "Hello World!"
 
-# Bold
+# 加粗
 message = "**Bold Text**"
 
-# Italic
+# 斜体
 message = "*Italic Text*"
 
-# Code
+# 代码
 message = "`Code`"
 
-# Code block
+# 代码块
 message = "```python\nprint('Hello')\n```"
 
-# Link
+# 链接
 message = "[Text](https://example.com)"
 
-# Mention user
+# 提及用户
 message = f"<@{user_id}>"
 
-# Mention role
+# 提及角色
 message = f"<@&{role_id}>"
 ```
 
-## Embed Messages
+## 嵌入消息
 
-Discord supports embed messages:
+Discord 支持嵌入消息（Embed）：
 
 ```python
 async def send_embed(self, channel_id, title, description):
@@ -108,8 +103,8 @@ async def send_embed(self, channel_id, title, description):
         "description": description,
         "color": 0x00ff00,
         "fields": [
-            {"name": "Field1", "value": "Value1", "inline": True},
-            {"name": "Field2", "value": "Value2", "inline": True}
+            {"name": "字段1", "value": "值1", "inline": True},
+            {"name": "字段2", "value": "值2", "inline": True}
         ],
         "footer": {"text": "NekoBot"},
         "timestamp": "2025-01-01T00:00:00Z"
@@ -121,11 +116,11 @@ async def send_embed(self, channel_id, title, description):
     )
 ```
 
-## Slash Commands
+## 斜杠命令
 
-Discord supports slash commands:
+Discord 支持斜杠命令（Slash Commands）：
 
-### Register Slash Command
+### 注册斜杠命令
 
 ```python
 async def register_slash_command(self, name, description):
@@ -138,7 +133,7 @@ async def register_slash_command(self, name, description):
             "options": [
                 {
                     "name": "option1",
-                    "description": "Option1",
+                    "description": "选项1",
                     "type": 3,  # STRING
                     "required": True
                 }
@@ -147,7 +142,7 @@ async def register_slash_command(self, name, description):
     )
 ```
 
-### Handle Slash Command
+### 处理斜杠命令
 
 ```python
 async def on_message(self, message):
@@ -163,9 +158,9 @@ async def on_message(self, message):
             )
 ```
 
-## Advanced Features
+## 高级功能
 
-### Send File
+### 发送文件
 
 ```python
 async def send_file(self, channel_id, file_path):
@@ -177,7 +172,7 @@ async def send_file(self, channel_id, file_path):
         )
 ```
 
-### Get Server Information
+### 获取服务器信息
 
 ```python
 async def get_guild_info(self, guild_id):
@@ -189,7 +184,7 @@ async def get_guild_info(self, guild_id):
     return result.get("data")
 ```
 
-### Get Member List
+### 获取成员列表
 
 ```python
 async def get_members(self, guild_id):
@@ -201,41 +196,41 @@ async def get_members(self, guild_id):
     return result.get("data", [])
 ```
 
-## Discord API Rate Limits
+## Discord API 限制
 
-Discord API has rate limits:
+Discord API 有速率限制：
 
-| Operation Type | Limit |
-|---------------|-------|
-| Global | 50 requests/second |
-| Per channel | 5 requests/5 seconds |
-| Per member | 1 request/second |
+| 操作类型 | 限制 |
+|----------|------|
+| 全局 | 50 请求/秒 |
+| 每个频道 | 5 请求/5秒 |
+| 每个成员 | 1 请求/秒 |
 
-Implement a request queue to avoid triggering limits.
+建议实现请求队列以避免触发限制。
 
-## Common Issues
+## 常见问题
 
-### Bot Not Receiving Messages
+### Bot 无法收到消息
 
-1. Check if bot has been added to server
-2. Confirm bot has "Read Messages" permission
-3. Check if INTENTS configuration is correct
+1. 检查 Bot 是否已添加到服务器
+2. 确认 Bot 有"读取消息"权限
+3. 检查 INTENTS 配置是否正确
 
-### Message Send Failed
+### 消息发送失败
 
-1. Confirm bot has "Send Messages" permission
-2. Check if channel allows bot to send messages
-3. Verify if Token is correct
+1. 确认 Bot 有"发送消息"权限
+2. 检查频道是否允许 Bot 发送消息
+3. 验证 Token 是否正确
 
-### Rate Limits
+### 速率限制
 
-If you encounter rate limit errors:
-1. Implement exponential backoff retry
-2. Reduce request frequency
-3. Use batch operations
+如果遇到速率限制错误：
+1. 实现指数退避重试
+2. 减少请求频率
+3. 使用批量操作
 
-## Related Links
+## 相关链接
 
-- [Discord API Documentation](https://discord.com/developers/docs/intro)
-- [Discord Bot Guide](https://discord.com/developers/docs/topics/guides)
+- [Discord API 文档](https://discord.com/developers/docs/intro)
+- [Discord Bot 指南](https://discord.com/developers/docs/topics/guides)
 - [Slash Commands](https://discord.com/developers/docs/interactions/application-commands)

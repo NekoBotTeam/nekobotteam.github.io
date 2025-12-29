@@ -1,173 +1,156 @@
+---
+layout: page
+title: Quick Start
+---
+
 # Quick Start
 
-This guide will help you get NekoBot up and running in 5 minutes.
+This guide will help you get started with NekoBot, from installation to running your first bot.
 
-## System Requirements
+## Requirements
 
-- Python 3.8+
-- 4GB+ RAM
-- 1GB+ available disk space
+- **Python**: 3.10 or higher
+- **Operating System**: Windows / Linux / macOS
+- **Memory**: 2GB or more recommended
+- **Network**: Internet access required for installing dependencies and connecting to LLM services
 
 ## Installation Steps
 
-### 1. Clone the Project
+### 1. Clone Repository
 
 ```bash
-git clone https://github.com/NekoBotDevs/NekoBot.git
+git clone https://github.com/NekoBotTeam/NekoBot.git
 cd NekoBot
 ```
 
 ### 2. Install Dependencies
 
-Install dependencies using pip:
+NekoBot provides two ways to install dependencies: using uv (recommended) or using pip.
+
+#### Using uv (Recommended)
 
 ```bash
-pip install -r requirements.txt
+# Install uv (if not already installed)
+pip install uv
+
+# Install NekoBot and its dependencies
+uv pip install -e .
 ```
 
-Or use uv (recommended):
+#### Using pip
 
 ```bash
-# Create virtual environment
-uv venv
-
-# Activate virtual environment
-# Windows
-.\venv\Scripts\activate
-# Linux/macOS
-source venv/bin/activate
-
-# Install dependencies
-pip install -r requirements.txt
+# Install NekoBot and its dependencies
+pip install -e .
 ```
 
-### 3. Start the Service
+### 3. Create Configuration File
+
+On first run, NekoBot will automatically create a default configuration file. You can also manually create `data/cmd_config.json`:
+
+```json
+{
+  "command_prefix": "/",
+  "server": {
+    "host": "0.0.0.0",
+    "port": 6285
+  },
+  "jwt": {
+    "secret_key": "your-secret-key-here",
+    "algorithm": "HS256",
+    "access_token_expire_minutes": 30
+  },
+  "webui_enabled": true,
+  "demo": false
+}
+```
+
+### 4. Start NekoBot
 
 ```bash
+# Using uv
+uv run main.py
+
+# Or using python
 python main.py
 ```
 
-After the service starts, you will see output similar to:
+### 5. Access Web Dashboard
+
+After successful startup, open your browser and visit:
 
 ```
-[INFO] NekoBot starting...
-[INFO] Database initialized
-[INFO] Plugin manager loaded
-[INFO] Web server started on http://localhost:8080
-[INFO] Ready to receive requests
+http://localhost:6285
 ```
 
-## Initial Configuration
+## Default Account
 
-### 1. Access the Dashboard
+NekoBot provides a default administrator account:
 
-Open your browser and visit `http://localhost:8080`
-
-### 2. Login to the System
-
-Use the default account to login:
 - **Username**: `nekobot`
 - **Password**: `nekobot`
 
-::: warning Security Reminder
-Please change the default password immediately after first login!
-:::
+> **Security Note**: On first login, the system will require you to change your password. Please change it to ensure security.
 
-### 3. Change Password
+## Verify Installation
 
-After login, the system will force you to change the password:
-
-1. Click the user avatar in the top right corner
-2. Select "Change Password"
-3. Enter new password (recommend using a strong password)
-4. Confirm the change
-
-## Basic Configuration
-
-### 1. Configure LLM Providers
-
-Configure AI providers in the dashboard:
-
-1. Go to "LLM Configuration" page
-2. Click "Add Provider"
-3. Select provider type (e.g., OpenAI)
-4. Enter API Key and configuration parameters
-5. Save configuration
-
-### 2. Configure Chat Platforms
-
-Select the chat platforms to connect:
-
-1. Go to "Platform Configuration" page
-2. Select platform type (e.g., QQ)
-3. Fill in platform configuration information
-4. Enable the platform
-
-### 3. Install Plugins
-
-Install some basic plugins:
-
-1. Go to "Plugin Management" page
-2. Browse available plugins
-3. Click "Install" button
-4. Wait for installation to complete
-
-## Test the Bot
-
-### 1. Send Test Message
-
-Send a message in the configured chat platform:
+After starting NekoBot, you should see similar log output in the terminal:
 
 ```
-/help
+2025-XX-XX XX:XX:XX.XXX [INFO] Starting NekoBot...
+2025-XX-XX XX:XX:XX.XXX [INFO] Initializing NekoBot server...
+2025-XX-XX XX:XX:XX.XXX [INFO] Platform adapter registered: aiocqhttp
+2025-XX-XX XX:XX:XX.XXX [INFO] Loading plugins...
+2025-XX-XX XX:XX:XX.XXX [INFO] Plugin loading complete, X plugins loaded
+2025-XX-XX XX:XX:XX.XXX [INFO] Starting Quart application: http://0.0.0.0:6285
 ```
-
-### 2. Check Response
-
-The bot should reply with help information showing available command list.
-
-### 3. Test AI Conversation
-
-Send any message, and the bot will use the configured LLM service to reply.
 
 ## Next Steps
 
-Now you have successfully started NekoBot! Next you can:
+- [Installation and Configuration](./installation.md) - Learn detailed configuration options
+- [Platform Integration](./platforms.md) - Configure chat platforms
+- [LLM Configuration](./llm.md) - Configure AI models
+- [Plugin System](./plugins.md) - Learn about plugin development
 
-- 📖 Read [Configuration Guide](/en/guide/configuration) to learn detailed configuration
-- 🧩 Check [Plugin System](/en/guide/plugins) to learn plugin development
-- 🔧 Explore [API Documentation](/en/api/) for advanced integration
-- 💡 Browse [Plugin Store](/en/plugins/) to install more features
+## Common Issues
 
-## FAQ
+### How to change the port?
 
-### Q: What if startup fails?
+Edit the `data/cmd_config.json` file and modify the `server.port` field:
 
-A: Check the following:
-- Is Python version 3.8+?
-- Are all dependencies installed?
-- Is port 8080 occupied?
-- Check error logs for detailed information
+```json
+{
+  "server": {
+    "host": "0.0.0.0",
+    "port": 8080
+  }
+}
+```
 
-### Q: Cannot access dashboard?
+### Forgot password?
 
-A: Confirm:
-- Is the service running normally?
-- Is firewall blocking port 8080?
-- Is the browser address correct?
+Run the following command to reset your password:
 
-### Q: Bot not responding to messages?
+```bash
+# Using uv
+uv run main.py reset-password
 
-A: Check:
-- Is platform configuration correct?
-- Is the bot enabled?
-- Is network connection normal?
+# Or using python
+python main.py reset-password
+```
 
-## Get Help
+Follow the prompts to enter your new password twice.
 
-If you encounter problems, you can get help through:
+### How to enable or disable the Web dashboard?
 
-- 📖 View [Complete Documentation](/en/guide/)
-- 🐛 [Submit Issue](https://github.com/NekoBotDevs/NekoBot/issues)
-- 💬 [Community Discussions](https://github.com/NekoBotDevs/NekoBot/discussions)
+Edit `data/cmd_config.json` and modify the `webui_enabled` field:
 
+```json
+{
+  "webui_enabled": true
+}
+```
+
+### How to view logs?
+
+NekoBot outputs logs to the terminal using loguru. You can also view logs in real-time through the "Logs" page of the Web dashboard.

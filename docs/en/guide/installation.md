@@ -1,375 +1,281 @@
-# Installation Guide
+---
+layout: page
+title: Installation and Configuration
+---
 
-This guide provides detailed installation steps for NekoBot, supporting multiple installation methods.
+# Installation and Configuration
 
-## System Requirements
-
-### Minimum Requirements
-- **Operating System**: Windows 10+, macOS 10.15+, Ubuntu 18.04+
-- **Python**: 3.8 or higher
-- **Memory**: 4GB RAM
-- **Storage**: 1GB available space
-- **Network**: Stable internet connection
-
-### Recommended Configuration
-- **Operating System**: Windows 11, macOS 12+, Ubuntu 20.04+
-- **Python**: 3.10 or higher
-- **Memory**: 8GB+ RAM
-- **Storage**: 5GB+ available space
-- **Network**: High-speed internet connection
+This section details NekoBot installation methods, configuration options, and deployment options.
 
 ## Installation Methods
 
-### Method 1: Source Installation (Recommended)
+### Install from Source
 
-#### 1. Clone Repository
+#### Using uv (Recommended)
 
 ```bash
-git clone https://github.com/NekoBotDevs/NekoBot.git
+# Clone repository
+git clone https://github.com/NekoBotTeam/NekoBot.git
 cd NekoBot
+
+# Install with uv
+uv pip install -e .
+
+# Start
+uv run main.py
 ```
 
-#### 2. Create Virtual Environment
-
-Using venv (Python built-in):
+#### Using pip
 
 ```bash
-# Create virtual environment
-python -m venv venv
+# Clone repository
+git clone https://github.com/NekoBotTeam/NekoBot.git
+cd NekoBot
 
-# Activate virtual environment
-# Windows
-venv\Scripts\activate
-# Linux/macOS
-source venv/bin/activate
+# Install with pip
+pip install -e .
+
+# Start
+python main.py
 ```
 
-Or using uv (recommended, faster):
+### Docker Deployment
+
+NekoBot provides Docker deployment support.
+
+#### Using Docker Compose
 
 ```bash
-# Install uv
-pip install uv
-
-# Create virtual environment
-uv venv
-
-# Activate virtual environment
-# Windows
-.\venv\Scripts\activate
-# Linux/macOS
-source venv/bin/activate
-```
-
-#### 3. Install Dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-#### 4. Initialize Configuration
-
-```bash
-python main.py --init
-```
-
-### Method 2: Docker Installation
-
-#### 1. Install Docker
-
-Ensure Docker and Docker Compose are installed:
-
-```bash
-# Check Docker version
-docker --version
-docker-compose --version
-```
-
-#### 2. Download Configuration Files
-
-```bash
-# Download docker-compose.yml
-curl -O https://raw.githubusercontent.com/NekoBotDevs/NekoBot/main/docker-compose.yml
-
-# Download environment variables file
-curl -O https://raw.githubusercontent.com/NekoBotDevs/NekoBot/main/.env.example
-cp .env.example .env
-```
-
-#### 3. Start Service
-
-```bash
+# Build and start
 docker-compose up -d
-```
 
-### Method 3: Pre-compiled Package
-
-::: warning Note
-Pre-compiled packages are under development, stay tuned!
-:::
-
-## Configuration
-
-### Environment Variables
-
-Create `.env` file to configure environment variables:
-
-```bash
-# Basic configuration
-NEKOBOT_HOST=0.0.0.0
-NEKOBOT_PORT=8080
-NEKOBOT_DEBUG=false
-
-# Database configuration
-DATABASE_URL=sqlite:///nekobot.db
-
-# JWT configuration
-JWT_SECRET_KEY=your-secret-key-here
-
-# CORS configuration
-CORS_ORIGINS=http://localhost:3000,http://localhost:8080
-
-# Logging configuration
-LOG_LEVEL=INFO
-LOG_FILE=logs/nekobot.log
-
-# Plugin configuration
-PLUGIN_DIR=data/plugins
-PLUGIN_AUTO_RELOAD=true
-
-# LLM configuration (optional)
-OPENAI_API_KEY=your-openai-key
-ANTHROPIC_API_KEY=your-anthropic-key
-```
-
-### Configuration Files
-
-Main configuration files are located in `config/` directory:
-
-- `config.yaml` - Main configuration file
-- `platforms.yaml` - Platform configuration
-- `llm.yaml` - LLM provider configuration
-- `plugins.yaml` - Plugin configuration
-
-## Platform-Specific Installation
-
-### Windows
-
-#### Using PowerShell
-
-```powershell
-# Clone project
-git clone https://github.com/NekoBotDevs/NekoBot.git
-cd NekoBot
-
-# Create virtual environment
-python -m venv venv
-venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Start service
-python main.py
-```
-
-#### Using Chocolatey
-
-```powershell
-# Install Python (if not installed)
-choco install python
-
-# Follow steps above
-```
-
-### macOS
-
-#### Using Homebrew
-
-```bash
-# Install Python (if not installed)
-brew install python
-
-# Clone project
-git clone https://github.com/NekoBotDevs/NekoBot.git
-cd NekoBot
-
-# Create virtual environment
-python3 -m venv venv
-source venv/bin/activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Start service
-python main.py
-```
-
-### Linux (Ubuntu/Debian)
-
-```bash
-# Update package manager
-sudo apt update
-
-# Install Python and dependencies
-sudo apt install python3 python3-pip python3-venv git
-
-# Clone project
-git clone https://github.com/NekoBotDevs/NekoBot.git
-cd NekoBot
-
-# Create virtual environment
-python3 -m venv venv
-source venv/bin/activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Start service
-python main.py
-```
-
-### Linux (CentOS/RHEL)
-
-```bash
-# Install Python and dependencies
-sudo yum install python3 python3-pip git
-
-# Follow steps above
-```
-
-## Verify Installation
-
-### 1. Check Service Status
-
-```bash
-# Check processes
-ps aux | grep python
-
-# Check ports
-netstat -tlnp | grep 8080
-```
-
-### 2. Access Dashboard
-
-Open browser and visit `http://localhost:8080`
-
-### 3. Check Logs
-
-```bash
 # View logs
-tail -f logs/nekobot.log
+docker-compose logs -f
 
-# Or use CLI tool
-nekobot-cli status
+# Stop
+docker-compose down
 ```
 
-## Updates
-
-### Using Git Update
+#### Using Dockerfile
 
 ```bash
-# Pull latest code
-git pull origin main
+# Build image
+docker build -t nekobot .
 
-# Update dependencies
-pip install -r requirements.txt --upgrade
-
-# Restart service
-python main.py
+# Run container
+docker run -d -p 6285:6285 --name nekobot nekobot
 ```
 
-### Using CLI Tool
+## Configuration Files
+
+NekoBot configuration files are located in the `data/` directory.
+
+### Main Configuration File: `data/cmd_config.json`
+
+```json
+{
+  "command_prefix": "/",
+  "server": {
+    "host": "0.0.0.0",
+    "port": 6285
+  },
+  "jwt": {
+    "secret_key": "your-secret-key-here",
+    "algorithm": "HS256",
+    "access_token_expire_minutes": 30
+  },
+  "webui_enabled": true,
+  "demo": false
+}
+```
+
+#### Configuration Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `command_prefix` | string | `/` | Command prefix |
+| `server.host` | string | `0.0.0.0` | Server listening address |
+| `server.port` | number | `6285` | Server listening port |
+| `jwt.secret_key` | string | - | JWT secret key (change in production) |
+| `jwt.algorithm` | string | `HS256` | JWT algorithm |
+| `jwt.access_token_expire_minutes` | number | `30` | Token expiration time (minutes) |
+| `webui_enabled` | boolean | `true` | Enable Web dashboard |
+| `demo` | boolean | `false` | Demo mode |
+
+### Platform Configuration: `data/platforms_sources.json`
+
+```json
+{
+  "aiocqhttp": {
+    "type": "aiocqhttp",
+    "enable": true,
+    "id": "aiocqhttp",
+    "name": "NekoBot",
+    "ws_host": "0.0.0.0",
+    "ws_port": 6299,
+    "command_prefix": "/"
+  }
+}
+```
+
+### LLM Provider Configuration: `data/llm_providers.json`
+
+```json
+{
+  "openai": {
+    "type": "openai",
+    "enable": true,
+    "id": "openai",
+    "api_key": "your-api-key-here",
+    "base_url": "https://api.openai.com/v1",
+    "model": "gpt-4"
+  }
+}
+```
+
+## Directory Structure
+
+```
+NekoBot/
+├── data/                      # Data directory
+│   ├── plugins/               # User plugins
+│   ├── plugin_data/          # Plugin data
+│   ├── cmd_config.json       # Main configuration file
+│   ├── platforms_sources.json # Platform configuration
+│   ├── llm_providers.json    # LLM configuration
+│   ├── users.json            # User data
+│   └── dist/                 # Web dashboard static files
+│
+├── dashboard/                # React frontend source
+├── packages/
+│   └── backend/              # Backend code
+├── main.py                   # Main entry point
+├── pyproject.toml           # Python project configuration
+└── docker-compose.yaml      # Docker configuration
+```
+
+## User Management
+
+### Default Account
+
+- Username: `nekobot`
+- Password: `nekobot`
+
+### Change Password
+
+#### Via CLI
 
 ```bash
-# Check for updates
-nekobot-cli check
-
-# Auto update
-nekobot-cli update
+python main.py reset-password
 ```
 
-## Uninstall
+#### Via Web Dashboard
 
-### Complete Uninstall
+1. Login to Web dashboard
+2. Go to "Settings" -> "Change Password"
+3. Enter old password and new password
 
-```bash
-# Stop service
-pkill -f "python main.py"
+### User Data Storage
 
-# Delete project directory
-rm -rf NekoBot
+User data is stored in the `data/users.json` file with bcrypt password encryption.
 
-# Delete data directory (optional)
-rm -rf ~/.nekobot
+## Log Configuration
+
+NekoBot uses [loguru](https://github.com/Delgan/loguru) for log management.
+
+### Log Levels
+
+- `DEBUG`: Debug information
+- `INFO`: General information
+- `WARNING`: Warning information
+- `ERROR`: Error information
+
+### Custom Logging
+
+Modify log configuration in `main.py`:
+
+```python
+logger.remove()
+logger.add(
+    sys.stdout,
+    format="{time:YYYY-MM-DD HH:mm:ss.SSS} <level>[{level}]</level> {message}",
+    level="DEBUG",
+    colorize=True,
+)
 ```
 
-### Keep Data Uninstall
+## Security Recommendations
 
-```bash
-# Backup data
-cp -r data/ backup/
+### Production Configuration
 
-# Stop service
-pkill -f "python main.py"
+1. **Change default password**: Change immediately after first login
+2. **Change JWT secret**: Modify `jwt.secret_key` to a random string
+3. **Use HTTPS**: Configure reverse proxy to use HTTPS
+4. **Restrict access**: Use firewall to restrict port access
+5. **Regular backups**: Backup the `data/` directory
 
-# Delete project directory
-rm -rf NekoBot
+### Generate JWT Secret Key
 
-# Restore data (after reinstallation)
-cp -r backup/ data/
+Generate a random secret key using Python:
+
+```python
+import secrets
+print(secrets.token_urlsafe(32))
 ```
 
-## Troubleshooting
+## Reverse Proxy Configuration
 
-### Common Issues
+### Nginx
 
-#### 1. Python Version Incompatible
+```nginx
+server {
+    listen 80;
+    server_name your-domain.com;
 
-```bash
-# Check Python version
-python --version
-
-# If version is too low, please upgrade Python
+    location / {
+        proxy_pass http://127.0.0.1:6285;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        
+        # WebSocket support
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+    }
+}
 ```
 
-#### 2. Dependency Installation Failed
+### Caddy
 
-```bash
-# Upgrade pip
-pip install --upgrade pip
-
-# Use domestic mirror source
-pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+```
+your-domain.com {
+    reverse_proxy 127.0.0.1:6285
+}
 ```
 
-#### 3. Port Occupied
+## Common Issues
 
-```bash
-# Check port usage
-netstat -tlnp | grep 8080
+### Port Already in Use
 
-# Kill occupying process
-kill -9 <PID>
+If port 6285 is already in use, modify the port configuration in `data/cmd_config.json`.
 
-# Or change port
-export NEKOBOT_PORT=8081
+### Plugin Loading Failed
+
+Check if the plugin directory structure is correct:
+
+```
+data/plugins/your_plugin/
+├── main.py
+├── _conf_schema.json (optional)
+└── metadata.yaml (optional)
 ```
 
-#### 4. Permission Issues
+### LLM Service Connection Failed
 
-```bash
-# Give script execution permission
-chmod +x main.py
+Check if the API key is correct and if the network can access the LLM service provider.
 
-# Or use sudo (not recommended)
-sudo python main.py
-```
+### WebSocket Connection Failed
 
-### Get Help
-
-If you encounter problems, please:
-
-1. Check [Troubleshooting Guide](/en/guide/troubleshooting)
-2. Search [Known Issues](https://github.com/NekoBotDevs/NekoBot/issues)
-3. Submit [New Issue](https://github.com/NekoBotDevs/NekoBot/issues/new)
-4. Join [Community Discussions](https://github.com/NekoBotDevs/NekoBot/discussions)
+Ensure the reverse proxy is correctly configured with WebSocket support.

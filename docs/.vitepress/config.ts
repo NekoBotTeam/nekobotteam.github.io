@@ -1,8 +1,8 @@
 import { defineConfig } from 'vitepress'
-import { resolve } from 'path'
 
 export default defineConfig({
   title: 'NekoBot',
+  titleTemplate: 'NekoBot - :title',
   description: 'AI驱动的机器人框架',
   base: '/',
   
@@ -14,62 +14,90 @@ export default defineConfig({
       title: 'NekoBot',
       description: 'AI驱动的机器人框架',
       themeConfig: {
+        // 启用主题切换
+        darkModeSwitch: true,
         nav: [
-          { text: '首页', link: '/' },
-          { text: '指南', link: '/zh/guide/' },
-          { text: 'API', link: '/zh/api/' },
-          { text: '插件', link: '/zh/plugins/' },
-          { text: 'GitHub', link: 'https://github.com/NekoBotDevs/NekoBot' }
+          { text: '快速开始', link: '/guide/getting-started' },
+          { text: '关于', link: '/other/about' }
         ],
         sidebar: {
-          '/zh/guide/': [
+          '/guide/': [
             {
-              text: '开始使用',
+              text: '快速开始',
               items: [
-                { text: '介绍', link: '/zh/guide/' },
-                { text: '快速开始', link: '/zh/guide/getting-started' },
-                { text: '安装', link: '/zh/guide/installation' },
-                { text: '配置', link: '/zh/guide/configuration' }
+                { text: '快速开始', link: '/guide/getting-started' },
+                { text: '什么是 NekoBot', link: '/guide/what-is-nekobot' },
+                { text: '安装和配置', link: '/guide/installation' },
+                { text: '启动方式', link: '/guide/startup' }
               ]
             },
             {
               text: '核心功能',
               items: [
-                { text: '插件系统', link: '/zh/guide/plugins' },
-                { text: '命令系统', link: '/zh/guide/commands' },
-                { text: 'LLM配置', link: '/zh/guide/llm' },
-                { text: '日志管理', link: '/zh/guide/logging' }
+                { text: '架构设计', link: '/guide/architecture' },
+                { text: '插件系统', link: '/guide/plugins' },
+                { text: '命令系统', link: '/guide/commands' },
+                { text: 'LLM配置', link: '/guide/llm' },
+                { text: '日志管理', link: '/guide/logging' }
               ]
             },
             {
               text: '平台对接',
               items: [
-                { text: 'QQ', link: '/zh/guide/platforms/qq' },
-                { text: 'Discord', link: '/zh/guide/platforms/discord' },
-                { text: 'Telegram', link: '/zh/guide/platforms/telegram' },
-                { text: '微信', link: '/zh/guide/platforms/wechat' }
+                { text: '平台对接', link: '/guide/platforms' },
+                { text: 'QQ', link: '/guide/platforms/qq' },
+                { text: 'Discord', link: '/guide/platforms/discord' },
+                { text: 'Telegram', link: '/guide/platforms/telegram' },
+                { text: '钉钉', link: '/guide/platforms/dingtalk' },
+                { text: '微信', link: '/guide/platforms/wechat' },
+                { text: '飞书', link: '/guide/platforms/feishu' }
               ]
             }
           ],
-          '/zh/api/': [
+          '/config/': [
             {
-              text: 'API参考',
+              text: '配置',
               items: [
-                { text: '概述', link: '/zh/api/' },
-                { text: '认证', link: '/zh/api/auth' },
-                { text: '插件管理', link: '/zh/api/plugins' },
-                { text: '配置管理', link: '/zh/api/config' }
+                { text: '基础配置', link: '/config/basic' },
+                { text: '高级配置', link: '/config/advanced' }
               ]
             }
           ],
-          '/zh/plugins/': [
+          '/use/': [
             {
-              text: '插件开发',
+              text: '使用',
               items: [
-                { text: '介绍', link: '/zh/plugins/' },
-                { text: '创建插件', link: '/zh/plugins/creating' },
-                { text: '插件API', link: '/zh/plugins/api' },
-                { text: '发布插件', link: '/zh/plugins/publishing' }
+                { text: '接入框架', link: '/use/integration' },
+                { text: '社区资源', link: '/use/community' }
+              ]
+            }
+          ],
+          '/develop/': [
+            {
+              text: '开发',
+              items: [
+                { text: '插件开发', link: '/develop/plugin' },
+                { text: 'API 文档', link: '/develop/api' },
+                { text: '事件处理', link: '/develop/events' },
+                { text: '消息类型', link: '/develop/messages' }
+              ]
+            }
+          ],
+          '/other/': [
+            {
+              text: '其他',
+              items: [
+                { text: '关于', link: '/other/about' },
+                { text: '安全', link: '/other/security' },
+                { text: '贡献指南', link: '/other/contributing' }
+              ]
+            }
+          ],
+          '/api/': [
+            {
+              text: 'API 参考',
+              items: [
+                { text: 'API 概览', link: '/api/overview' }
               ]
             }
           ]
@@ -82,27 +110,27 @@ export default defineConfig({
       title: 'NekoBot',
       description: 'AI-powered bot framework',
       themeConfig: {
+        // 启用主题切换
+        darkModeSwitch: true,
         nav: [
-          { text: 'Home', link: '/en/' },
-          { text: 'Guide', link: '/en/guide/' },
-          { text: 'API', link: '/en/api/' },
-          { text: 'Plugins', link: '/en/plugins/' },
-          { text: 'GitHub', link: 'https://github.com/NekoBotDevs/NekoBot' }
+          { text: 'Quick Start', link: '/en/guide/getting-started' },
+          { text: 'About', link: '/en/other/about' }
         ],
         sidebar: {
           '/en/guide/': [
             {
-              text: 'Getting Started',
+              text: 'Quick Start',
               items: [
-                { text: 'Introduction', link: '/en/guide/' },
                 { text: 'Quick Start', link: '/en/guide/getting-started' },
+                { text: 'What is NekoBot', link: '/en/guide/what-is-nekobot' },
                 { text: 'Installation', link: '/en/guide/installation' },
-                { text: 'Configuration', link: '/en/guide/configuration' }
+                { text: 'Startup', link: '/en/guide/startup' }
               ]
             },
             {
               text: 'Core Features',
               items: [
+                { text: 'Architecture', link: '/en/guide/architecture' },
                 { text: 'Plugin System', link: '/en/guide/plugins' },
                 { text: 'Command System', link: '/en/guide/commands' },
                 { text: 'LLM Configuration', link: '/en/guide/llm' },
@@ -112,10 +140,52 @@ export default defineConfig({
             {
               text: 'Platform Integration',
               items: [
+                { text: 'Platforms', link: '/en/guide/platforms' },
                 { text: 'QQ', link: '/en/guide/platforms/qq' },
                 { text: 'Discord', link: '/en/guide/platforms/discord' },
                 { text: 'Telegram', link: '/en/guide/platforms/telegram' },
-                { text: 'WeChat', link: '/en/guide/platforms/wechat' }
+                { text: 'DingTalk', link: '/en/guide/platforms/dingtalk' },
+                { text: 'WeChat', link: '/en/guide/platforms/wechat' },
+                { text: 'Feishu', link: '/en/guide/platforms/feishu' }
+              ]
+            }
+          ],
+          '/en/config/': [
+            {
+              text: 'Configuration',
+              items: [
+                { text: 'Basic Config', link: '/en/config/basic' },
+                { text: 'Advanced Config', link: '/en/config/advanced' }
+              ]
+            }
+          ],
+          '/en/use/': [
+            {
+              text: 'Usage',
+              items: [
+                { text: 'Integration', link: '/en/use/integration' },
+                { text: 'Community', link: '/en/use/community' }
+              ]
+            }
+          ],
+          '/en/develop/': [
+            {
+              text: 'Development',
+              items: [
+                { text: 'Plugin Development', link: '/en/develop/plugin' },
+                { text: 'API Documentation', link: '/en/develop/api' },
+                { text: 'Events', link: '/en/develop/events' },
+                { text: 'Message Types', link: '/en/develop/messages' }
+              ]
+            }
+          ],
+          '/en/other/': [
+            {
+              text: 'Other',
+              items: [
+                { text: 'About', link: '/en/other/about' },
+                { text: 'Security', link: '/en/other/security' },
+                { text: 'Contributing', link: '/en/other/contributing' }
               ]
             }
           ],
@@ -123,21 +193,7 @@ export default defineConfig({
             {
               text: 'API Reference',
               items: [
-                { text: 'Overview', link: '/en/api/' },
-                { text: 'Authentication', link: '/en/api/auth' },
-                { text: 'Plugin Management', link: '/en/api/plugins' },
-                { text: 'Configuration', link: '/en/api/config' }
-              ]
-            }
-          ],
-          '/en/plugins/': [
-            {
-              text: 'Plugin Development',
-              items: [
-                { text: 'Introduction', link: '/en/plugins/' },
-                { text: 'Creating Plugins', link: '/en/plugins/creating' },
-                { text: 'Plugin API', link: '/en/plugins/api' },
-                { text: 'Publishing', link: '/en/plugins/publishing' }
+                { text: 'API Overview', link: '/en/api/overview' }
               ]
             }
           ]
@@ -147,6 +203,9 @@ export default defineConfig({
   },
 
   themeConfig: {
+    // 启用主题切换
+    darkModeSwitch: true,
+
     // 搜索配置
     search: {
       provider: 'local',
@@ -190,18 +249,18 @@ export default defineConfig({
 
     // 社交链接
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/NekoBotDevs/NekoBot' }
+      { icon: 'github', link: 'https://github.com/NekoBotTeam/NekoBot' }
     ],
 
     // 页脚
     footer: {
       message: '基于 MIT 许可发布',
-      copyright: 'Copyright © 2024 NekoBotDevs'
+      copyright: 'Copyright © 2025 NekoBotTeam'
     },
 
     // 编辑链接
     editLink: {
-      pattern: 'https://github.com/NekoBotDevs/NekoBot/edit/main/docs/:path',
+      pattern: 'https://github.com/NekoBotTeam/NekoBot/edit/main/docs/:path',
       text: '在 GitHub 上编辑此页'
     },
 
@@ -230,18 +289,9 @@ export default defineConfig({
     darkModeSwitchTitle: '切换到深色模式'
   },
 
-  // 自定义主题
-  vite: {
-    resolve: {
-      alias: {
-        '@': resolve(__dirname, '../')
-      }
-    }
-  },
-
   // 头部配置
   head: [
-    ['link', { rel: 'icon', href: '/favicon.ico' }],
+    ['link', { rel: 'icon', type: 'image/png', href: '/logo.svg' }],
     ['meta', { name: 'viewport', content: 'width=device-width, initial-scale=1.0' }],
     ['meta', { name: 'description', content: 'AI驱动的机器人框架' }],
     ['meta', { name: 'keywords', content: 'NekoBot, 机器人, AI, 插件, 框架' }]

@@ -1,24 +1,19 @@
----
-layout: page
-title: Telegram Platform Integration
----
+# Telegram 平台对接
 
-# Telegram Platform Integration
+NekoBot 支持 Telegram 平台，通过 Telegram Bot API 对接。
 
-NekoBot supports Telegram platform through Telegram Bot API.
+## Telegram Bot 令牌
 
-## Telegram Bot Token
+### 1. 创建 Bot
 
-### 1. Create Bot
+1. 在 Telegram 中搜索 [@BotFather](https://t.me/BotFather)
+2. 发送 `/newbot` 命令
+3. 按照提示输入 Bot 名称和用户名
+4. 复制获得的 API Token
 
-1. Search for [@BotFather](https://t.me/BotFather) in Telegram
-2. Send `/newbot` command
-3. Follow prompts to enter bot name and username
-4. Copy the obtained API Token
+### 2. 配置 NekoBot
 
-### 2. Configure NekoBot
-
-Edit `data/platforms_sources.json`:
+编辑 `data/platforms_sources.json`：
 
 ```json
 {
@@ -32,11 +27,11 @@ Edit `data/platforms_sources.json`:
 }
 ```
 
-### 3. Set Webhook (Optional)
+### 3. 设置 Webhook（可选）
 
-Telegram supports both Webhook and long polling modes:
+Telegram 支持 Webhook 和长轮询两种模式：
 
-#### Webhook Mode
+#### Webhook 模式
 
 ```python
 async def set_webhook(self, webhook_url):
@@ -47,53 +42,53 @@ async def set_webhook(self, webhook_url):
     )
 ```
 
-#### Long Polling Mode (Default)
+#### 长轮询模式（默认）
 
-No additional configuration needed, NekoBot automatically uses long polling to fetch messages.
+无需额外配置，NekoBot 自动使用长轮询获取消息。
 
-## Message Events
+## 消息事件
 
-### Supported Events
+### 支持的事件
 
-| Event Type | Description |
-|------------|-------------|
-| Message | Text, image, video, and other messages |
-| Callback Query | Callback button click |
-| Inline Query | Inline search |
-| Member Join | Member joins group |
-| Member Leave | Member leaves group |
+| 事件类型 | 说明 |
+|----------|------|
+| 消息 | 文本、图片、视频等消息 |
+| 回调查询 | 回调按钮点击 |
+| 内联查询 | 内联搜索 |
+| 成员加入 | 成员加入群组 |
+| 成员离开 | 成员离开群组 |
 
-## Message Format
+## 消息格式
 
-Telegram messages support Markdown and HTML formats:
+Telegram 消息支持 Markdown 和 HTML 格式：
 
-### Markdown Mode
-
-```python
-message = """
-*Bold text*
-_Italic text_
-`Code`
-```Code block```
-[Link](https://example.com)
-"""
-```
-
-### HTML Mode
+### Markdown 模式
 
 ```python
 message = """
-<b>Bold text</b>
-<i>Italic text</i>
-<code>Code</code>
-<pre>Code block</pre>
-<a href="https://example.com">Link</a>
+*加粗文本*
+_斜体文本_
+`代码`
+```代码块```
+[链接](https://example.com)
 """
 ```
 
-## Message Types
+### HTML 模式
 
-### Send Text Message
+```python
+message = """
+<b>加粗文本</b>
+<i>斜体文本</i>
+<code>代码</code>
+<pre>代码块</pre>
+<a href="https://example.com">链接</a>
+"""
+```
+
+## 消息类型
+
+### 发送文本消息
 
 ```python
 await self.send_group_message(
@@ -104,7 +99,7 @@ await self.send_group_message(
 )
 ```
 
-### Send Photo
+### 发送图片
 
 ```python
 async def send_photo(self, chat_id, photo_url, caption=""):
@@ -119,7 +114,7 @@ async def send_photo(self, chat_id, photo_url, caption=""):
     )
 ```
 
-### Send Video
+### 发送视频
 
 ```python
 async def send_video(self, chat_id, video_url, caption=""):
@@ -134,7 +129,7 @@ async def send_video(self, chat_id, video_url, caption=""):
     )
 ```
 
-### Send File
+### 发送文件
 
 ```python
 async def send_document(self, chat_id, file_path, caption=""):
@@ -149,20 +144,20 @@ async def send_document(self, chat_id, file_path, caption=""):
     )
 ```
 
-## Buttons and Keyboards
+## 按钮和键盘
 
-### Inline Keyboard
+### 内联键盘
 
 ```python
 async def send_inline_keyboard(self, chat_id):
     keyboard = {
         "inline_keyboard": [
             [
-                {"text": "Button1", "callback_data": "btn1"},
-                {"text": "Button2", "callback_data": "btn2"}
+                {"text": "按钮1", "callback_data": "btn1"},
+                {"text": "按钮2", "callback_data": "btn2"}
             ],
             [
-                {"text": "Link", "url": "https://example.com"}
+                {"text": "链接", "url": "https://example.com"}
             ]
         ]
     }
@@ -171,20 +166,20 @@ async def send_inline_keyboard(self, chat_id):
         action="send_message",
         params={
             "chat_id": chat_id,
-            "text": "Please select:",
+            "text": "请选择：",
             "reply_markup": keyboard
         }
     )
 ```
 
-### Reply Keyboard
+### 回复键盘
 
 ```python
 async def send_reply_keyboard(self, chat_id):
     keyboard = {
         "keyboard": [
-            [{"text": "Option1"}, {"text": "Option2"}],
-            [{"text": "Cancel"}]
+            [{"text": "选项1"}, {"text": "选项2"}],
+            [{"text": "取消"}]
         ],
         "resize_keyboard": True,
         "one_time_keyboard": False
@@ -194,13 +189,13 @@ async def send_reply_keyboard(self, chat_id):
         action="send_message",
         params={
             "chat_id": chat_id,
-            "text": "Please select:",
+            "text": "请选择：",
             "reply_markup": keyboard
         }
     )
 ```
 
-## Handle Callback Query
+## 处理回调查询
 
 ```python
 async def on_message(self, message):
@@ -209,13 +204,15 @@ async def on_message(self, message):
         callback_id = callback["id"]
         data = callback.get("data")
         
-        await self.answer_callback_query(callback_id, text="Clicked")
+        # 回答回调查询
+        await self.answer_callback_query(callback_id, text="已点击")
         
+        # 处理按钮点击
         if data == "btn1":
             await self.send_group_message(
                 group_id=callback["message"]["chat"]["id"],
                 user_id=callback["from"]["id"],
-                message="You clicked Button1",
+                message="你点击了按钮1",
                 platform_id="telegram"
             )
 
@@ -227,9 +224,9 @@ async def answer_callback_query(self, callback_id, text=""):
     )
 ```
 
-## Advanced Features
+## 高级功能
 
-### Get User Information
+### 获取用户信息
 
 ```python
 async def get_user_profile(self, user_id):
@@ -241,7 +238,7 @@ async def get_user_profile(self, user_id):
     return result.get("data")
 ```
 
-### Get Group Information
+### 获取群组信息
 
 ```python
 async def get_group_info(self, group_id):
@@ -253,14 +250,14 @@ async def get_group_info(self, group_id):
     return result.get("data")
 ```
 
-### Set Command Menu
+### 设置命令菜单
 
 ```python
 async def set_bot_commands(self):
     commands = [
-        {"command": "start", "description": "Start using"},
-        {"command": "help", "description": "Help"},
-        {"command": "settings", "description": "Settings"}
+        {"command": "start", "description": "开始使用"},
+        {"command": "help", "description": "帮助"},
+        {"command": "settings", "description": "设置"}
     ]
     await self.platform_server.call_platform_api(
         platform_id="telegram",
@@ -269,7 +266,7 @@ async def set_bot_commands(self):
     )
 ```
 
-### Get Group Members
+### 获取群组成员
 
 ```python
 async def get_group_members(self, group_id):
@@ -281,40 +278,40 @@ async def get_group_members(self, group_id):
     return result.get("data", {})
 ```
 
-## File Size Limits
+## 文件大小限制
 
-Telegram API has the following file size limits:
+Telegram API 有以下文件大小限制：
 
-| File Type | Size Limit |
-|------------|------------|
-| Photo | 10 MB |
-| Video | 50 MB |
-| Document | 50 MB (Premium users 2 GB) |
-| Audio | 50 MB |
-| Animation | 50 MB |
+| 文件类型 | 大小限制 |
+|----------|----------|
+| 照片 | 10 MB |
+| 视频 | 50 MB |
+| 文档 | 50 MB（Premium 用户 2 GB） |
+| 音频 | 50 MB |
+| 动画 | 50 MB |
 
-## Common Issues
+## 常见问题
 
-### Bot Not Receiving Messages
+### Bot 无法收到消息
 
-1. Ensure bot has been added to the group
-2. Check if bot has permission to receive messages
-3. Verify if Token is correct
+1. 确保 Bot 已添加到群组
+2. 检查 Bot 有权限接收消息
+3. 验证 Token 是否正确
 
-### Message Send Failed
+### 消息发送失败
 
-1. Confirm bot has send message permission
-2. Check if message content complies with Telegram specifications
-3. Verify if chat ID is correct
+1. 确认 Bot 有发送消息权限
+2. 检查消息内容是否符合 Telegram 规范
+3. 验证聊天 ID 是否正确
 
-### Webhook Setup Failed
+### Webhook 设置失败
 
-1. Ensure Webhook URL is accessible
-2. Use HTTPS (Telegram requires it)
-3. Verify if SSL certificate is valid
+1. 确保 Webhook URL 可访问
+2. 使用 HTTPS（Telegram 要求）
+3. 验证 SSL 证书有效
 
-## Related Links
+## 相关链接
 
 - [Telegram Bot API](https://core.telegram.org/bots/api)
 - [BotFather](https://t.me/BotFather)
-- [Telegram Bot Development Guide](https://core.telegram.org/bots/features)
+- [Telegram 机器人开发指南](https://core.telegram.org/bots/features)
