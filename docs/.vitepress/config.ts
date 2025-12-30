@@ -247,7 +247,7 @@ export default defineConfig({
 
     // 页脚
     footer: {
-      message: '基于 MIT 许可发布',
+      message: '此文档基于 MIT 许可发布',
       copyright: 'Copyright © 2025 NekoBotTeam'
     },
 
